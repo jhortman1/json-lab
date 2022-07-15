@@ -1,9 +1,12 @@
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
         EventHandler eventHandler = new EventHandler();
         List<Person>personList=new ArrayList<Person>();
@@ -11,14 +14,14 @@ public class Main {
         //Ask the user if they want to restore the list of people from file.
         // If yes, restore from the file you might have saved from a previous run of your program.
         // If no, start a brand-new list.
-        String prompt = "Would you like to restore person list from backup?";
+        String prompt = "Would you like to restore person list from backup? (y - yes, n - no)";
         String yORn="";
         do{
             yORn = eventHandler.responseHandler(sc,prompt);
         }while(!yORn.equals("y") && !yORn.equals("n"));
         if(yORn.equalsIgnoreCase("y"))
         {
-            personList = fileReader.readFromFile("PersonList.csv");
+            personList = fileReader.readFromFileJSON("PersonList.json");
         }
         //Ask user to do one of the following
         //Add a person to the list.
@@ -43,6 +46,7 @@ public class Main {
                 case 3:
                     System.out.println("Exiting Program...Saving all persons to file");
                     eventHandler.writePeopleToFileCSV(personList);
+                    eventHandler.writePeopleToFileJSON(personList);
                     System.exit(0);
                     break;
             }

@@ -20,14 +20,6 @@ public class EventHandler {
         Person p = new Person(firstName, lastName);
         return p;
     }
-    public Person createPerson(String personCSV) {
-        String[] personValues = personCSV.split(",");
-        String firstName, lastName;
-        firstName = personValues[0];
-        lastName = personValues[1];
-        Person p = new Person(firstName, lastName);
-        return p;
-    }
     public String responseHandler(Scanner sc, String prompt)
     {
         System.out.println(prompt);
@@ -62,14 +54,13 @@ public class EventHandler {
     }
     public void writePeopleToFileJSON(List<Person> personList) throws JsonProcessingException {
         String json = new ObjectMapper().writeValueAsString(personList);
-        System.out.println(json);
-
-        //formatting
-        String newJson = "";
-        for (String s : json.split("},")) {
-            newJson += s + "}\n";
+        try(FileWriter fileWriter = new FileWriter("PersonList.json"))
+        {
+            fileWriter.write(json);
+        }catch(Exception e)
+        {
+            Logger.getInstance().log("File Error");
         }
-        System.out.println("Formatted JSON:\n" + newJson);
     }
     public int handleInput(Scanner sc, String prompt) {
         int choice = 0;
